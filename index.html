@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayChain - Complete Blockchain Wallet</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="screen active">
+    <div class="container">
+      <div class="card">
+        <h1>🔗 PayChain</h1>
+        <p>Complete Blockchain Wallet with Chat</p>
+        
+        <div class="form-group">
+          <input type="tel" id="phoneNumber" placeholder="+911234567890" pattern="[\+\d\s\-]+">
+          <input type="password" id="password" placeholder="Password">
+          <button onclick="login()" class="btn primary">Login</button>
+          <button onclick="showRegister()" class="btn secondary">Create Account</button>
+        </div>
+        
+        <div class="security-notice">
+          <h3>🔒 Security Features</h3>
+          <ul>
+            <li>Phone number verification</li>
+            <li>AI-powered monitoring</li>
+            <li>Offline transactions</li>
+            <li>Encrypted chat</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Register Screen -->
+  <div id="registerScreen" class="screen">
+    <div class="container">
+      <div class="card">
+        <h1>Create Account</h1>
+        <div class="form-group">
+          <input type="tel" id="regPhone" placeholder="+254 846 500 025">
+          <input type="password" id="regPassword" placeholder="Create Password">
+          <input type="password" id="confirmPassword" placeholder="Confirm Password">
+          <button onclick="register()" class="btn primary">Create Wallet</button>
+          <button onclick="showLogin()" class="btn secondary">Back to Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Dashboard -->
+  <div id="dashboard" class="screen">
+    <div class="container">
+      <header>
+        <h1>PayChain Wallet</h1>
+        <div class="user-info">
+          <span id="userPhone"></span>
+          <button onclick="logout()" class="btn small">Logout</button>
+        </div>
+      </header>
+      
+      <!-- Balance Card -->
+      <div class="card balance-card">
+        <h2>Your Balance</h2>
+        <div class="balance" id="balanceAmount">0.00</div>
+        <div class="currency">PHONE</div>
+      </div>
+      
+      <!-- Connection Status Panel -->
+      <div class="connection-panel">
+        <div class="connection-status" id="connectionStatus">
+          <span class="status-indicator online"></span>
+          <span>Online Mode</span>
+        </div>
+        <div class="connection-actions">
+          <button onclick="showOfflineOptions()" class="btn small">🌐 Offline Options</button>
+          <button onclick="showSecurityDashboard()" class="btn small">🔒 Security</button>
+        </div>
+      </div>
+      
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <button onclick="showSend()" class="action-btn">
+          <span>📤</span>
+          Send
+        </button>
+        <button onclick="showReceive()" class="action-btn">
+          <span>📥</span>
+          Receive
+        </button>
+        <button onclick="showHistory()" class="action-btn">
+          <span>📊</span>
+          History
+        </button>
+        <button onclick="addFunds()" class="action-btn">
+          <span>💳</span>
+          Add Funds
+        </button>
+        <button onclick="showChat()" class="action-btn">
+          <span>💬</span>
+          Chat
+        </button>
+        <button onclick="showOfflineOptions()" class="action-btn">
+          <span>📡</span>
+          Offline
+        </button>
+      </div>
+      
+      <!-- Send Money Section -->
+      <div id="sendSection" class="section">
+        <h2>Send PHONE</h2>
+        <div class="form-group">
+          <input type="tel" id="recipientPhone" placeholder="Recipient Phone Number">
+          <input type="number" id="sendAmount" placeholder="Amount" step="0.01">
+          <input type="password" id="txPassword" placeholder="Confirm Password">
+          <div id="feeInfo" style="display: none;"></div>
+          <button onclick="sendMoney()" class="btn primary">Send Now</button>
+          <button onclick="hideSend()" class="btn secondary">Cancel</button>
+        </div>
+      </div>
+      
+      <!-- Receive Section -->
+      <div id="receiveSection" class="section">
+        <h2>Receive PHONE</h2>
+        <div class="qr-code">
+          <div class="qr-placeholder">📱</div>
+        </div>
+        <p>Your Phone Number:</p>
+        <div class="address-box" id="userAddress"></div>
+        <button onclick="hideReceive()" class="btn secondary">Close</button>
+      </div>
+      
+      <!-- Transaction History -->
+      <div id="historySection" class="section">
+        <h2>Transaction History</h2>
+        <div id="transactionHistory" class="transaction-list">
+          <!-- Transactions will be loaded here -->
+        </div>
+        <button onclick="hideHistory()" class="btn secondary">Close</button>
+      </div>
+      
+      <!-- Offline Transactions Section -->
+      <div id="offlineSection" class="section">
+        <h2>📡 Offline Transfer</h2>
+        <div class="form-group">
+          <input type="tel" id="offlineRecipient" placeholder="Recipient Phone Number">
+          <input type="number" id="offlineAmount" placeholder="Amount" step="0.01">
+          <input type="password" id="offlinePassword" placeholder="Confirm Password">
+          <select id="connectionType">
+            <option value="auto">Auto (Bluetooth/WiFi)</option>
+            <option value="bluetooth">Bluetooth Only</option>
+            <option value="wifi">WiFi Direct Only</option>
+          </select>
+          <button onclick="createOfflineTransaction()" class="btn primary">Create Offline Transfer</button>
+          <button onclick="hideOffline()" class="btn secondary">Cancel</button>
+        </div>
+        <div class="offline-info">
+          <h4>How Offline Transfer Works:</h4>
+          <ul>
+            <li>💰 Balance is reserved immediately</li>
+            <li>📡 Transaction broadcast via Bluetooth/WiFi</li>
+            <li>⏱️ Valid for 24 hours</li>
+            <li>✅ Auto-confirms when recipient comes online</li>
+            <li>🔄 Balance released if expired</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- AI Monitor Panel -->
+      <div class="ai-monitor-panel">
+        <div class="ai-status">
+          <div class="status-indicator"></div>
+          <strong>AI System Active</strong>
+        </div>
+        <div class="ai-metrics">
+          <div class="metric">
+            <div>Errors Fixed</div>
+            <div id="aiCorrections">0</div>
+          </div>
+          <div class="metric">
+            <div>System Health</div>
+            <div id="aiHealth">100%</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Security Info -->
+      <div class="security-info">
+        <h3>🔐 Security Status</h3>
+        <div class="security-items">
+          <div class="security-item">
+            <span class="status good">●</span>
+            Wallet Encrypted
+          </div>
+          <div class="security-item">
+            <span class="status good">●</span>
+            Phone Verified
+          </div>
+          <div class="security-item" id="sessionStatus">
+            <span class="status good">●</span>
+            Session Active
+          </div>
+        </div>
+      </div>
+      
+      <!-- Additional Action Buttons -->
+      <div class="action-buttons">
+        <button onclick="showAIDashboard()" class="btn secondary">🤖 AI System Dashboard</button>
+        <button onclick="showOfflineDashboard()" class="btn secondary">🌐 Offline Dashboard</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Chat Screen -->
+  <div id="chatScreen" class="screen">
+    <div class="chat-container">
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <button onclick="showDashboard()" class="btn small back-btn">← Back</button>
+        <div class="chat-title">
+          <h2 id="currentChatTitle">Global Chat</h2>
+          <p id="currentChatDescription">Chat with users worldwide</p>
+        </div>
+        <div class="chat-actions">
+          <button onclick="chatUI.showSearch()" class="btn icon" title="Search">🔍</button>
+          <button onclick="chatUI.showSettings()" class="btn icon" title="Settings">⚙️</button>
+          <button onclick="chatUI.showStats()" class="btn icon" title="Statistics">📊</button>
+        </div>
+      </div>
+      
+      <div class="chat-layout">
+        <!-- Channels Sidebar -->
+        <div class="channels-sidebar">
+          <div class="sidebar-header">
+            <h3>Channels</h3>
+            <div class="chat-stats" id="chatStats"></div>
+          </div>
+          <div class="channels-list" id="channelsList">
+            <!-- Channels will be loaded here -->
+          </div>
+          
+          <div class="private-chats-section">
+            <h4>Private Messages</h4>
+            <div class="new-private-chat">
+              <input type="tel" id="privateChatPhone" placeholder="+254...">
+              <button onclick="chatUI.startPrivateChatFromInput()" class="btn small">Start Chat</button>
+            </div>
+            <div id="privateChatsList">
+              <!-- Private chats will appear here -->
+            </div>
+          </div>
+        </div>
+        
+        <!-- Chat Area -->
+        <div class="chat-area">
+          <div class="messages-container" id="chatMessages">
+            <!-- Messages will appear here -->
+          </div>
+          
+          <!-- Media Preview -->
+          <div id="mediaPreview" class="media-preview-container" style="display: none;"></div>
+          
+          <!-- Message Input -->
+          <div class="message-input-container">
+            <div class="input-actions">
+              <label for="mediaUpload" class="btn icon" title="Add Media">📎</label>
+              <input type="file" id="mediaUpload" multiple style="display: none;" onchange="chatUI.handleMediaUpload(event)">
+              <button onclick="chatUI.addEmoji()" class="btn icon" title="Emoji">😊</button>
+            </div>
+            <input type="text" id="messageInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter') chatUI.sendMessage()">
+            <button onclick="chatUI.sendMessage()" class="btn primary send-btn">Send</button>
+          </div>
+        </div>
+        
+        <!-- Online Users Sidebar -->
+        <div class="users-sidebar">
+          <h4>Online Users</h4>
+          <div id="onlineUsersList">
+            <!-- Online users will appear here -->
+          </div>
+          
+          <div class="ai-moderation-status">
+            <h4>🤖 AI Moderation</h4>
+            <div class="status-active">Active</div>
+            <div class="moderation-stats">
+              <div>Messages Checked: <span id="messagesChecked">0</span></div>
+              <div>Violations Blocked: <span id="violationsBlocked">0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification System -->
+  <div id="notification" class="notification"></div>
+  
+  <!-- Modals -->
+  <!-- AI Dashboard Modal -->
+  <div id="aiDashboard" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🤖 AI System Dashboard</h2>
+        <button onclick="hideAIDashboard()" class="close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="health-metrics">
+          <div class="health-metric">
+            <span class="metric-value" id="totalErrors">0</span>
+            <span class="metric-label">Errors Tracked</span>
+          </div>
+          <div class="health-metric">
+            <span class="metric-value" id="totalCorrections">0</span>
+            <span class="metric-label">Corrections Made</span>
+          </div>
+          <div class="health-metric">
+            <span class="metric-value" id="systemUptime">100%</span>
+            <span class="metric-label">System Health</span>
+          </div>
+          <div class="health-metric">
+            <span class="metric-value" id="activeUsers">0</span>
+            <span class="metric-label">Active Users</span>
+          </div>
+        </div>
+        
+        <h3>Recent Errors</h3>
+        <div id="errorLogs" class="log-container">
+          <!-- Error logs will appear here -->
+        </div>
+        
+        <h3>AI Corrections</h3>
+        <div id="correctionLogs" class="log-container">
+          <!-- Correction logs will appear here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Offline Dashboard -->
+  <div id="offlineDashboard" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🌐 Offline Transfer Dashboard</h2>
+        <button onclick="hideOfflineDashboard()" class="close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="connection-metrics">
+          <div class="metric-card">
+            <div class="metric-value" id="onlineStatus">Online</div>
+            <div class="metric-label">Connection</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="availablePeers">0</div>
+            <div class="metric-label">Nearby Peers</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="pendingSent">0</div>
+            <div class="metric-label">Pending Sent</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="pendingReceived">0</div>
+            <div class="metric-label">Pending Received</div>
+          </div>
+        </div>
+        
+        <h3>Connection Options</h3>
+        <div class="connection-options">
+          <button onclick="switchConnectionMode('online')" class="btn small">🌐 Online</button>
+          <button onclick="switchConnectionMode('bluetooth')" class="btn small">📡 Bluetooth</button>
+          <button onclick="switchConnectionMode('wifi')" class="btn small">📶 WiFi Direct</button>
+          <button onclick="switchConnectionMode('offline')" class="btn small">🔌 Fully Offline</button>
+        </div>
+        
+        <h3>Pending Offline Transactions</h3>
+        <div id="offlineTransactionsList" class="transaction-list">
+          <!-- Offline transactions will appear here -->
+        </div>
+        
+        <h3>Available Peers</h3>
+        <div id="peersList" class="peers-list">
+          <!-- Nearby peers will appear here -->
+        </div>
+        
+        <div class="emergency-actions">
+          <button onclick="emergencyCleanup()" class="btn danger">🚨 Emergency Cleanup</button>
+          <small>Release all reserved balances from stuck transactions</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Security Dashboard -->
+  <div id="securityDashboard" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🔒 Security Dashboard</h2>
+        <button onclick="hideSecurityDashboard()" class="close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="security-metrics">
+          <div class="metric-card">
+            <div class="metric-value" id="lockedAccounts">0</div>
+            <div class="metric-label">Locked Accounts</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="failedAttempts">0</div>
+            <div class="metric-label">Failed Attempts</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="suspiciousActivities">0</div>
+            <div class="metric-label">Suspicious Activities</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value" id="securityScore">100%</div>
+            <div class="metric-label">Security Score</div>
+          </div>
+        </div>
+        
+        <h3>Recent Security Events</h3>
+        <div id="securityEvents" class="security-events">
+          <!-- Security events will appear here -->
+        </div>
+        
+        <div class="security-actions">
+          <button onclick="runSecurityScan()" class="btn primary">Run Security Scan</button>
+          <button onclick="emergencyUnlockAll()" class="btn danger">Emergency Unlock All</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- Search Modal -->
+  <div id="searchModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Search Messages</h3>
+        <button onclick="chatUI.closeSearch()" class="close-btn">×</button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="chatSearch" placeholder="Search messages..." onkeyup="chatUI.searchMessages()">
+        <div id="searchResults" class="search-results">
+          <!-- Search results will appear here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Chat Modal for various purposes -->
+  <div id="chatModal" class="modal">
+    <div class="modal-content">
+      <div id="chatModalContent">
+        <!-- Modal content will be loaded here -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- Load Scripts in Correct Order -->
+  <script src="security.js"></script>
+  <script src="blockchain.js"></script>
+  <script src="database.js"></script>
+  <script src="ai-monitor.js"></script>
+  <script src="notification-system.js"></script>
+  <script src="offline-manager.js"></script>
+  <script src="security-enhanced.js"></script>
+  <script src="chat-platform.js"></script>
+  <script src="chat-ui.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
