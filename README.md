@@ -111,7 +111,7 @@
 
 <h2>🏗️ Installation & Setup</h2>
 <h3>1. Clone the repository</h3>
-<pre><code>git clone https://github.com/yourusername/yourrepo.git</code></pre>
+<pre><code>git clone https://github.com/faisalgitt/PayChain.git</code></pre>
 
 <h3>2. Open in browser</h3>
 <p>Just open <strong>index.html</strong> — no backend required.</p>
