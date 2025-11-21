@@ -83,7 +83,7 @@ class ChatPlatform {
       type: 'regional',
       region: 'africa',
       description: 'Chat with users in Africa',
-      rules: 'Regional discussions welcome',
+      rules: 'Regional discussions with Africans',
       userCount: 0,
       messages: []
     },
@@ -93,7 +93,7 @@ class ChatPlatform {
       type: 'regional',
       region: 'europe',
       description: 'Chat with users in Europe',
-      rules: 'Regional discussions welcome',
+      rules: 'Regional discussions with Europeons',
       userCount: 0,
       messages: []
     },
@@ -103,7 +103,7 @@ class ChatPlatform {
       type: 'regional',
       region: 'asia',
       description: 'Chat with users in Asia',
-      rules: 'Regional discussions welcome',
+      rules: 'Regional discussions with Asians',
       userCount: 0,
       messages: []
     },
@@ -113,7 +113,7 @@ class ChatPlatform {
       type: 'regional',
       region: 'americas',
       description: 'Chat with users in Americas',
-      rules: 'Regional discussions welcome',
+      rules: 'Regional discussions with Amaricans',
       userCount: 0,
       messages: []
     },
